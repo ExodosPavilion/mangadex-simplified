@@ -18,6 +18,9 @@ def getFrontPage():
 		{
 			title: some title
 			mangadex-id: 123
+			bayesianRating: 7.51
+			meanRating: 8.2
+			numOfUsers: 1504
 			link: site + href
 		}
 	'''
@@ -25,10 +28,11 @@ def getFrontPage():
 	for titleData in titles:
 		title = titleData.text
 
+		#/title/{mangaID}/{manga-name} is the format of titleData['href'], [2] becuase the leading / creates an empty list item when split
 		mangadexID = (titleData['href'].split('/'))[2]
 		apiJson = getTitleApiData(mangadexID)
 
-		link = site + titleData['href'][1:]
+		link = site + titleData['href'][1:] #remove the leading / from titleData['href'] and add to site url
 		
 		titleDetails.append({
 				'title':title, 
@@ -43,10 +47,17 @@ def getFrontPage():
 
 
 def printFrontPage(titleDetails):
+	'''
+		Print Format:
+			({manga ID}) {Manga title}
+			Bayesian Rating: {rating}
+			Mean User Rating: {rating} by {number of users}
+			{Link to manga page}
+	'''
 	for item in titleDetails:
 		print('(' + item['mangadexID'] + ') ' + item['title'])
 		print( 'Bayesian Rating: ' + str(item['bayesianRating']) )
-		print( 'Mean user rating: ' + str(item['meanRating']) + 'by ' + str(item['numOfUsers']) )
+		print( 'Mean user rating: ' + str(item['meanRating']) + ' by ' + str(item['numOfUsers']) )
 		print(item['link'])
 		print()
 
